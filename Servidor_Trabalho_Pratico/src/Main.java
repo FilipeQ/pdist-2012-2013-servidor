@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,18 +12,19 @@ import java.util.List;
 public class Main implements Runnable
 {
 	List<Socket>sockets;
-	List<String>usersActivos;
-	List<String>paresActivos;
+	//List<String>usersActivos;
+	//List<String>paresActivos;
+	Dados d;
     Socket s;
 	BufferedReader in;
 	PrintWriter out;
 	String user;
+	ObjectOutputStream oout;
 	
-	public Main(List<Socket>sockets,Socket s,List<String>usersActivos,List<String>paresActivos)
+	public Main(List<Socket>sockets,Socket s,Dados d)
 	{
 		this.sockets=sockets;
-		this.usersActivos=usersActivos;
-		this.paresActivos=paresActivos;
+		this.d=d;
 		this.s=s;
 	}
 	
@@ -30,18 +32,20 @@ public class Main implements Runnable
 	public static void main(String args[]) throws IOException
 	{
 		List<Socket>sockets = new ArrayList<>();
-		List<String>usersActivos=new ArrayList<>();
-		List<String>paresActivos=new ArrayList<>();
-        Socket s;
+		//List<String>usersActivos=new ArrayList<>();
+		//List<String>paresActivos=new ArrayList<>();
+        Dados d;
+		Socket s;
         Thread t;
         ServerSocket sServer;
 		int i=0;
 		
+		d=new Dados();
 		sServer=new ServerSocket(5002);
 		while(true)
 		{
 			s=sServer.accept();
-			t=new Thread(new Main(sockets,s,usersActivos,paresActivos));
+			t=new Thread(new Main(sockets,s,d));
 			//t.setDaemon(true);
 			t.start();
 			//if(i==20)
@@ -63,19 +67,28 @@ public class Main implements Runnable
 			{
 				user=in.readLine();
 				System.out.println(user);
-				if(usersActivos.size()==0)
+				if(d.getUsersActivos().size()==0)
 				{
 					System.out.println("OK");
 					out.println("Ok");
 					out.flush();
-					usersActivos.add(user);
+					d.getUsersActivos().add(user);
+					sockets.add(s);
+					
+					for(int i=0;i<sockets.size();i++)
+					{
+						oout=new ObjectOutputStream(sockets.get(i).getOutputStream());
+						oout.writeObject(d);
+						oout.flush();
+					}
+					
 					break;
 				}
 				else
 				{
-					for(int i=0;i<usersActivos.size();i++)
+					for(int i=0;i<d.getUsersActivos().size();i++)
 					{
-						if(user.equalsIgnoreCase(usersActivos.get(i)))
+						if(user.equalsIgnoreCase(d.getUsersActivos().get(i)))
 						{
 							out.println("Nok");
 							System.out.println("NOK");
@@ -88,13 +101,28 @@ public class Main implements Runnable
 					if(user!="Nok")
 					{
 						System.out.println("Vou adicionar um novo user");
-						usersActivos.add(user);
+						d.getUsersActivos().add(user);
 						out.println("OK");
 						out.flush();
+						sockets.add(s);
+						
+						for(int i=0;i<sockets.size();i++)
+						{
+							oout=new ObjectOutputStream(sockets.get(i).getOutputStream());
+							oout.writeObject(d);
+							oout.flush();
+						}
 						break;
 					}
 				}
 			}
+			//sockets.add(s);
+			/*for(int i=0;i<sockets.size();i++)
+			{
+				oout=new ObjectOutputStream(sockets.get(i).getOutputStream());
+				oout.writeObject(d);
+				oout.flush();
+			}*/
 		} 
 		catch (IOException e) 
 		{
