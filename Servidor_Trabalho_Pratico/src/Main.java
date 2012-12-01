@@ -44,8 +44,8 @@ public class Main implements Runnable
 			t=new Thread(new Main(sockets,s,usersActivos,paresActivos));
 			//t.setDaemon(true);
 			t.start();
-			if(i==20)
-				sServer.close();
+			//if(i==20)
+				//sServer.close();
 		}
 		
 	}
@@ -69,6 +69,7 @@ public class Main implements Runnable
 					out.println("Ok");
 					out.flush();
 					usersActivos.add(user);
+					break;
 				}
 				else
 				{
@@ -86,7 +87,10 @@ public class Main implements Runnable
 					
 					if(user!="Nok")
 					{
+						System.out.println("Vou adicionar um novo user");
 						usersActivos.add(user);
+						out.println("OK");
+						out.flush();
 						break;
 					}
 				}
@@ -97,7 +101,7 @@ public class Main implements Runnable
 			e.printStackTrace();
 		}
 		
-		while(true);
+		//while(true);
 		
 	}
 }
