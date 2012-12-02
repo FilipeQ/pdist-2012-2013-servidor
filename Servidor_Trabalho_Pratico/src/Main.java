@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -20,6 +21,7 @@ public class Main implements Runnable
 	PrintWriter out;
 	String user;
 	ObjectOutputStream oout;
+	ObjectInputStream oin;
 	
 	public Main(List<Socket>sockets,Socket s,Dados d)
 	{
@@ -61,16 +63,20 @@ public class Main implements Runnable
 		{
 			in=new BufferedReader(new InputStreamReader(s.getInputStream()));
 			out=new PrintWriter(s.getOutputStream());
-			
+			//oin=new ObjectInputStream(s.getInputStream());
+			//oout=new ObjectOutputStream(s.getOutputStream());
 			
 			while(true)
 			{
 				user=in.readLine();
+				//user=(String)oin.readObject();
 				System.out.println(user);
 				if(d.getUsersActivos().size()==0)
 				{
 					System.out.println("OK");
 					out.println("Ok");
+					//oout.writeObject("Ok");
+					//oout.flush();
 					out.flush();
 					d.getUsersActivos().add(user);
 					sockets.add(s);
@@ -91,6 +97,8 @@ public class Main implements Runnable
 						if(user.equalsIgnoreCase(d.getUsersActivos().get(i)))
 						{
 							out.println("Nok");
+							//oout.writeObject("Nok");
+							//oout.flush();
 							System.out.println("NOK");
 							out.flush();
 							user="Nok";
@@ -103,6 +111,8 @@ public class Main implements Runnable
 						System.out.println("Vou adicionar um novo user");
 						d.getUsersActivos().add(user);
 						out.println("OK");
+						//oout.writeObject("Ok");
+						//oout.flush();
 						out.flush();
 						sockets.add(s);
 						
@@ -116,13 +126,6 @@ public class Main implements Runnable
 					}
 				}
 			}
-			//sockets.add(s);
-			/*for(int i=0;i<sockets.size();i++)
-			{
-				oout=new ObjectOutputStream(sockets.get(i).getOutputStream());
-				oout.writeObject(d);
-				oout.flush();
-			}*/
 		} 
 		catch (IOException e) 
 		{
