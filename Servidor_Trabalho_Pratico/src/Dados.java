@@ -5,12 +5,9 @@ import java.util.List;
 
 public class Dados implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	List<String>usersActivos;
 	List<String>paresActivos;
+	String login;
 	
 	public Dados()
 	{
@@ -18,6 +15,7 @@ public class Dados implements Serializable
 		paresActivos=new ArrayList<>();
 	}
 
+	
 	public List<String> getUsersActivos() {
 		return usersActivos;
 	}
@@ -37,6 +35,22 @@ public class Dados implements Serializable
 	@Override
 	public String toString() {
 		return "Dados [usersActivos=" + usersActivos + "]";
+	}
+
+
+	/**
+	 * @return the login
+	 */
+	public String getLogin() {
+		return login;
+	}
+
+
+	/**
+	 * @param login the login to set
+	 */
+	public void setLogin(String login) {
+		this.login = login;
 	}
 	
 	
