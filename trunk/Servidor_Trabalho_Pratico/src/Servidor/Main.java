@@ -1,23 +1,24 @@
-import java.io.BufferedReader;
+package Servidor;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class Main implements Runnable
 {
+	static int id=0;
 	List<Socket>sockets;
+	List<Jogador>jogadores;
 	//List<String>usersActivos;
 	//List<String>paresActivos;
 	//Dados d;
-    static Socket s;
-    static Dados d;
+    Socket s;
+    Dados d;
 	//BufferedReader in;
 	//PrintWriter out;
 	ObjectOutputStream oout;
@@ -25,11 +26,12 @@ public class Main implements Runnable
 	String user;
 	
 	
-	public Main(List<Socket>sockets,Socket s) throws IOException
+	public Main(List<Jogador>jogadores,Socket s,Dados d) throws IOException
 	{
-		this.sockets=sockets;
+		this.jogadores=jogadores;
 		//this.d=d;
 		this.s=s;
+		this.d=d;
 		//in=new BufferedReader(new InputStreamReader(s.getInputStream()));
 		//out=new PrintWriter(s.getOutputStream());
 		System.out.println("socket servidor: "+s.getInetAddress()+" : "+s.getLocalPort());
@@ -41,9 +43,12 @@ public class Main implements Runnable
 	public static void main(String args[]) throws IOException
 	{
 		List<Socket>sockets = new ArrayList<>();
+		List<Jogador>jogadores=new ArrayList<>();
+		
+		
 		//List<String>usersActivos=new ArrayList<>();
 		//List<String>paresActivos=new ArrayList<>();
-       // Dados d;
+        Dados d;
 		Socket ss;
         Thread t;
         ServerSocket sServer;
@@ -55,7 +60,7 @@ public class Main implements Runnable
 		{
 			ss=sServer.accept();
 			System.out.println("socket servidor: "+ss.getInetAddress()+" : "+ss.getLocalPort());
-			t=new Thread(new Main(sockets,ss));
+			t=new Thread(new Main(jogadores,ss,d));
 			System.out.println("passou1");
 			//t.setDaemon(true);
 			t.start();
@@ -101,8 +106,9 @@ public class Main implements Runnable
 					d.setLogin("OK");
 					oout.writeObject(d.getLogin());
 					oout.flush();
-					sockets.add(s);
-					
+					//sockets.add(s);
+					jogadores.add(new Jogador(s,user,id));
+					id++;
 					/*for(int i=0;i<sockets.size();i++)
 					{
 						oout=new ObjectOutputStream(sockets.get(i).getOutputStream());
@@ -137,16 +143,21 @@ public class Main implements Runnable
 						d.setLogin("OK");
 						oout.writeObject(d.getLogin());
 						oout.flush();
-						sockets.add(s);
+						//sockets.add(s);
+						jogadores.add(new Jogador(s,user,id));
+						id++;
 						System.out.println("OK22");
 							
-						for(int i=0;i<sockets.size();i++)
+						for(int i=0;i<jogadores.size();i++)
 						{
-							oout=new ObjectOutputStream(sockets.get(i).getOutputStream());
+							oout=new ObjectOutputStream(jogadores.get(i).getS().getOutputStream());
 							System.out.println("ToString: "+d.toString());
-							oout.writeObject(d.getParesActivos());
+							/*oout.writeObject(d.getParesActivos());
 							oout.flush();
 							oout.writeObject(d.getUsersActivos());
+							oout.flush();*/
+							//d.setLogin(user);
+							oout.writeObject(d);
 							oout.flush();
 						}
 						break;
