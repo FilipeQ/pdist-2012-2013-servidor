@@ -6,9 +6,10 @@ import java.util.List;
 
 public class Dados implements Serializable
 {
-	List<String>usersActivos;
-	List<String>paresActivos;
-	String login;
+	private List<String>usersActivos;
+	private List<String>paresActivos;
+	private String login;
+	private String mensagem;
 	
 	public Dados()
 	{
@@ -52,6 +53,16 @@ public class Dados implements Serializable
 	 */
 	public void setLogin(String login) {
 		this.login = login;
+	}
+
+
+	public String getMensagem() {
+		return mensagem;
+	}
+
+
+	public void setMensagem(String mensagem) {
+		this.mensagem = mensagem;
 	}
 	
 	

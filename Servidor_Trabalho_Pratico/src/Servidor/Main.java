@@ -157,6 +157,7 @@ public class Main implements Runnable
 							oout.writeObject(d.getUsersActivos());
 							oout.flush();*/
 							//d.setLogin(user);
+							d.setMensagem("ActUsersActivos");
 							oout.writeObject(d);
 							oout.flush();
 						}
