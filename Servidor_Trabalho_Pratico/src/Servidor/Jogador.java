@@ -1,27 +1,40 @@
 package Servidor;
-
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+
 
 public class Jogador 
 {
-	Socket s;
+	ObjectOutputStream out;
+	ObjectInputStream in;
 	String nome;
 	int id;
 	int id_jogo;
+	int activo;//0->activo;1->em pedido de convite;2->em jogo
 	
-	public Jogador(Socket s,String nome,int id)
+	public Jogador(ObjectOutputStream out,ObjectInputStream in,String nome,int id)
 	{
-		this.s=s;
+		this.out=out;
+		this.in=in;
 		this.nome=nome;
 		this.id=id;
 	}
 
-	public Socket getS() {
-		return s;
+	public ObjectOutputStream getOut() {
+		return out;
 	}
 
-	public void setS(Socket s) {
-		this.s = s;
+	public void setOut(ObjectOutputStream out) {
+		this.out = out;
+	}
+
+	public ObjectInputStream getIn() {
+		return in;
+	}
+
+	public void setIn(ObjectInputStream in) {
+		this.in = in;
 	}
 
 	public String getNome() {
@@ -47,6 +60,7 @@ public class Jogador
 	public void setId_jogo(int id_jogo) {
 		this.id_jogo = id_jogo;
 	}
+	
 	
 	
 	

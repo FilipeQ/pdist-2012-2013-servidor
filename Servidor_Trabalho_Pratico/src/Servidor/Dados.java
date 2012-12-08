@@ -8,8 +8,8 @@ public class Dados implements Serializable
 {
 	private List<String>usersActivos;
 	private List<String>paresActivos;
-	private String login;
 	private String mensagem;
+
 	
 	public Dados()
 	{
@@ -33,28 +33,8 @@ public class Dados implements Serializable
 	public void setParesActivos(List<String> paresActivos) {
 		this.paresActivos = paresActivos;
 	}
-
-	@Override
-	public String toString() {
-		return "Dados [usersActivos=" + usersActivos + "]";
-	}
-
-
-	/**
-	 * @return the login
-	 */
-	public String getLogin() {
-		return login;
-	}
-
-
-	/**
-	 * @param login the login to set
-	 */
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
+	
+	
 
 	public String getMensagem() {
 		return mensagem;
@@ -64,7 +44,10 @@ public class Dados implements Serializable
 	public void setMensagem(String mensagem) {
 		this.mensagem = mensagem;
 	}
-	
-	
-}
 
+
+	@Override
+	public String toString() {
+		return "Dados [usersActivos=" + usersActivos + "]";
+	}
+}
