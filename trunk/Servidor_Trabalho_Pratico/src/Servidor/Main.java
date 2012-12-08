@@ -1,4 +1,5 @@
 package Servidor;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -6,6 +7,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+
+
+
 
 
 
@@ -17,143 +21,101 @@ public class Main implements Runnable
 	final String MSG_TIPO_2="ActParesActivos";
 	final String MSG_TIPO_3="Jogar";
 	
-	
-	
-	List<Socket>sockets;
 	List<Jogador>jogadores;
     Socket s;
     Dados d;
-	ObjectOutputStream oout;
-	ObjectInputStream inn;
-	String user;
+	ObjectOutputStream out,oout;
+	ObjectInputStream in;
 	
+	String user;
+	String login;
 	
 	public Main(List<Jogador>jogadores,Socket s,Dados d) throws IOException
 	{
 		this.jogadores=jogadores;
-		this.s=s;
+		out=new ObjectOutputStream(s.getOutputStream());
+		in=new ObjectInputStream(s.getInputStream());
 		this.d=d;
-		//System.out.println("socket servidor: "+s.getInetAddress()+" : "+s.getLocalPort());
-		
-	}
-
-	public static void main(String args[]) throws IOException
-	{
-		//List<Socket>sockets = new ArrayList<>();
-		List<Jogador>jogadores=new ArrayList<>();
-        Dados d;
-		Socket ss;
-        Thread t;
-        ServerSocket sServer;
-		
-		d=new Dados();
-		sServer=new ServerSocket(PORT);
-		while(true)
-		{
-			ss=sServer.accept();
-			//System.out.println("socket servidor: "+ss.getInetAddress()+" : "+ss.getLocalPort());
-			t=new Thread(new Main(jogadores,ss,d));
-			//System.out.println("passou1");
-			//t.setDaemon(true);
-			t.start();
-		}
-		
+		login="Ok";
 	}
 	
-	public void efectuaLogin()
+	public static void main(String args[])
 	{
-		try {
-			oout=new ObjectOutputStream(s.getOutputStream());
-			inn = new ObjectInputStream(s.getInputStream());
-		
-		
+		List<Jogador>jogadores=new ArrayList<>();
+        Dados d;
+		Socket s;
+        Thread t;
+        ServerSocket sServer;
+        
+        try
+        {
+	        sServer=new ServerSocket(PORT);
+	        d=new Dados();
 			while(true)
 			{
-				d.setLogin((String) inn.readObject());
-				user=d.getLogin();
-			
-
-				//System.out.println(d.getLogin());
-				if(d.getUsersActivos().size()==0)
-				{
-					//System.out.println("OK");
-					d.getUsersActivos().add(d.getLogin());
-					d.setLogin("OK");
-					oout.writeObject(d.getLogin());
-					oout.flush();
-					jogadores.add(new Jogador(s,user,id));
-					id++;	
-					//System.out.println("ToString: "+d.toString());	
-					break;
-				}
-				else
-				{
-					//for(int i=0;i<d.getUsersActivos().size();i++)
-					for(int i=0;i<jogadores.size();i++)
-					{
-						if(user.equalsIgnoreCase(jogadores.get(i).getNome()))
-						{
-							d.setLogin("Nok");
-							oout.writeObject(d.getLogin());
-							oout.flush();
-							System.out.println("NOK");
-							user="Nok";
-							break;
-						}
-					}
-					
-					if(user!="Nok")
-					{
-						//System.out.println("Vou adicionar um novo user");
-						d.getUsersActivos().add(d.getLogin());
-						d.setLogin("OK");
-						oout.writeObject(d.getLogin());
-						oout.flush();
-						jogadores.add(new Jogador(s,user,id));
-						id++;
-						//System.out.println("OK22");	
-						break;
-					}
-				}
+				s=sServer.accept();
+				t=new Thread(new Main(jogadores,s,d));
+				t.start();
 			}
-		} 
-		catch (IOException e1) 
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		catch (ClassNotFoundException e) 
-		{
-			/*System.out.println("n recebeu dados : "+e);
-			s.close();
-			break;*/
-			e.printStackTrace();
-		}
+        }
+        catch(IOException e){System.out.println(e);}
 	}
 
 	public void actualizarUsersActivos()
 	{
-		try 
+		try
 		{
+			d.setMensagem(MSG_TIPO_1);
 			for(int i=0;i<jogadores.size();i++)
 			{
-				oout=new ObjectOutputStream(jogadores.get(i).getS().getOutputStream());
+				oout=jogadores.get(i).getOut();
 				System.out.println("ToString: "+d.toString());
-				/*oout.writeObject(d.getParesActivos());
-				oout.flush();
-				oout.writeObject(d.getUsersActivos());
-				oout.flush();*/
-				//d.setLogin(user);
-				d.setMensagem(MSG_TIPO_1);
 				oout.writeObject(d);
 				oout.flush();
+				oout.reset();
 			}
-			
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
 		}
+		catch(IOException e){System.out.println(e);}
+	}
+	
+	public void efectuaLogin()
+	{
+		try
+		{
+			while(true)
+			{
+				user=(String) in.readObject();
+	
+				if(d.getUsersActivos().size()!=0)
+				{
+					for(int i=0;i<jogadores.size();i++)
+					{
+						if(user.equalsIgnoreCase(jogadores.get(i).getNome()))
+						{
+							login="Nok";
+							out.writeObject(login);
+							out.flush();
+							System.out.println("NOK");
+							break;
+						}
+					}
+				}
+	
+				if(login!="Nok")
+				{
+					jogadores.add(new Jogador(out,in,user,id));
+					id++;
+					d.getUsersActivos().add(user);
+					out.writeObject(login);
+					out.flush();
+
+					System.out.println("OK");	
+					break;
+				}
+			}
+		}
+		catch(ClassNotFoundException e){System.out.println(e);}
+		catch(IOException e){System.out.println(e);}
 	}
 	
 	@Override
@@ -161,5 +123,6 @@ public class Main implements Runnable
 	{
 		efectuaLogin();
 		actualizarUsersActivos();
+		while(true);
 	}
 }
