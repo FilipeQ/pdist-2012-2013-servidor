@@ -17,9 +17,10 @@ public class Main implements Runnable
 {
 	static int id=0;
 	static final int PORT=5001;
-	final String MSG_TIPO_1="ActUsersActivos";
-	final String MSG_TIPO_2="ActParesActivos";
-	final String MSG_TIPO_3="Jogar";
+	static final String MSG_TIPO_1="ActUsersActivos";
+	static final String MSG_TIPO_2="ActParesActivos";
+	static final String MSG_TIPO_3="Jogar";
+	static final String MSG_TIPO_4="Convidar";
 	
 	List<Jogador>jogadores;
     Socket s;
@@ -70,6 +71,7 @@ public class Main implements Runnable
 			{
 				oout=jogadores.get(i).getOut();
 				System.out.println("ToString: "+d.toString());
+				oout.writeObject(MSG_TIPO_1);
 				oout.writeObject(d);
 				oout.flush();
 				oout.reset();
@@ -103,7 +105,7 @@ public class Main implements Runnable
 	
 				if(login!="Nok")
 				{
-					jogadores.add(new Jogador(out,in,user,id));
+					jogadores.add(new Jogador(out,in,user,id,0));
 					id++;
 					d.getUsersActivos().add(user);
 					out.writeObject(login);
@@ -118,11 +120,46 @@ public class Main implements Runnable
 		catch(IOException e){System.out.println(e);}
 	}
 	
+	
+	public void esperaPedido()
+	{
+		
+	}
 	@Override
 	public void run() 
 	{
+		Jogador jog=null;
+		int start=0;
+		AguardaResposta ag;
+		Thread t = null;
+		
 		efectuaLogin();
 		actualizarUsersActivos();
-		while(true);
+		
+		for(int i=0;i<jogadores.size();i++)
+		{
+			jog=jogadores.get(i);
+			if(user==jog.getNome())
+				break;
+		}
+		ag=new AguardaResposta(in,jogadores,jog);
+		while(true)
+		{
+			if(jog.getActivo()==0 & start==0)
+			{
+				t=new Thread(ag);
+				t.start();
+				start=1;//Impede que esteja sempre a entrar aqui
+			}
+			else
+			{
+				if(jog.getActivo()==1)
+				{
+					t.interrupt();
+					start=0;
+					
+				}
+			}
+		}
 	}
 }

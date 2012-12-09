@@ -13,12 +13,13 @@ public class Jogador
 	int id_jogo;
 	int activo;//0->activo;1->em pedido de convite;2->em jogo
 	
-	public Jogador(ObjectOutputStream out,ObjectInputStream in,String nome,int id)
+	public Jogador(ObjectOutputStream out,ObjectInputStream in,String nome,int id,int activo)
 	{
 		this.out=out;
 		this.in=in;
 		this.nome=nome;
 		this.id=id;
+		this.activo=activo;
 	}
 
 	public ObjectOutputStream getOut() {
@@ -59,6 +60,14 @@ public class Jogador
 
 	public void setId_jogo(int id_jogo) {
 		this.id_jogo = id_jogo;
+	}
+
+	public int getActivo() {
+		return activo;
+	}
+
+	public void setActivo(int activo) {
+		this.activo = activo;
 	}
 	
 	
