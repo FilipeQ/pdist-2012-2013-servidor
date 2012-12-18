@@ -120,7 +120,21 @@ public class AguardaResposta implements Runnable
 				
 				if(resultadoJogo==1)
 				{
-				
+					out.writeObject(Main.MSG_TIPO_7);
+					oout.writeObject(Main.MSG_TIPO_8);
+					break;
+				}
+				else if(resultadoJogo==2)
+				{
+					out.writeObject(Main.MSG_TIPO_8);
+					oout.writeObject(Main.MSG_TIPO_7);
+					break;
+				}
+				else if(resultadoJogo==3)
+				{
+					out.writeObject(Main.MSG_TIPO_9);
+					oout.writeObject(Main.MSG_TIPO_9);
+					break;
 				}
 					
 			}
