@@ -57,7 +57,10 @@ public class AguardaResposta implements Runnable
 									jogPrincipal.setActivo(0);
 								}
 								else
+								{
 									oout.writeObject(Main.MSG_TIPO_5);//aceita jogo
+									
+								}
 								break;
 							}
 							
@@ -104,6 +107,7 @@ public class AguardaResposta implements Runnable
 		finally
 		{
 			System.out.println("1111 saiu a tread jog"+jogPrincipal.getNome());
+			System.out.println("Activo:"+jogPrincipal.getActivo());
 		}
 	}
 
