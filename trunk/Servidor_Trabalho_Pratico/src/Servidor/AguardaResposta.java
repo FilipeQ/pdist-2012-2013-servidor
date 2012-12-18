@@ -106,8 +106,10 @@ public class AguardaResposta implements Runnable
 			vez=0;
 			while(true)
 			{
+				System.out.println("entra while");
 				if(vez%2==0)//1==X
 				{
+					System.out.println("espera no vez%2");
 					jogo=(Jogo)in.readObject();
 					
 				}
@@ -115,7 +117,7 @@ public class AguardaResposta implements Runnable
 				{
 					jogo=(Jogo)in.readObject();
 				}
-				
+				vez++;
 				jogo.setFimJogo(jogo.verificaFimJogo());
 				out.writeObject(jogo);
 				oout.writeObject(jogo);
@@ -160,7 +162,7 @@ public class AguardaResposta implements Runnable
 		}
 	}
 
-
+	
 
 	
 	public ObjectOutputStream getOout() {

@@ -10,11 +10,20 @@ public class Jogo implements Serializable{
 	
 	
 	public Jogo() {
+		m = new int[LINHAS][COLUNAS];
 		colocaMatrizInicializada();
 		fimJogo = -1;
 	}
 
 
+	public void setPosicao(int linha, int coluna,int tipo){
+		m[linha][coluna]=tipo;
+	}
+	
+	public int getPosicao(int linha, int coluna)
+	{
+		return m[linha][coluna];
+	}
 	
 	public void colocaMatrizInicializada(){
         for(int i=0;i<COLUNAS;i++)
