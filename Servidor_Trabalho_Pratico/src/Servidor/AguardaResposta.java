@@ -3,6 +3,7 @@ package Servidor;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.List;
 
 public class AguardaResposta implements Runnable
@@ -13,12 +14,14 @@ public class AguardaResposta implements Runnable
 	String user;
 	String escolha;
 	Jogador jogConvidado,jogPrincipal;
+	Socket s;
 	
-	AguardaResposta(ObjectInputStream in,List<Jogador>jogadores,Jogador jogPrincipal)
+	
+	AguardaResposta(ObjectInputStream in,List<Jogador>jogadores,Jogador jogPrincipal,Socket s)
 	{
 		this.oout=null;
-		this.in=null;
-		//this.oout=oout;
+		this.inn=null;
+		this.s=s;
 		this.in=in;
 		this.jogadores=jogadores;
 		this.jogPrincipal=jogPrincipal;
@@ -31,11 +34,37 @@ public class AguardaResposta implements Runnable
 	{
 		try 
 		{
-			while(true)
+			while (!Thread.interrupted())
 			{
 				
 				user=(String)in.readObject();
-				
+				System.out.println("leu tread user:"+user);
+				System.out.println("Activo:"+jogPrincipal.getActivo());
+						
+				if(jogPrincipal.getActivo()==1)
+				{
+					System.out.println("vou sair da tread:");
+					if(!jogPrincipal.getNomeAdver().equalsIgnoreCase(""))
+					{
+						for(int i=0;i<jogadores.size();i++)
+						{
+							if(jogPrincipal.getNomeAdver().equalsIgnoreCase(jogadores.get(i).getNome()))
+							{
+								oout=jogadores.get(i).getOut();
+								if(user.equals("1"))
+								{
+									oout.writeObject(Main.MSG_TIPO_6);//regeita jogo
+									jogPrincipal.setActivo(0);
+								}
+								else
+									oout.writeObject(Main.MSG_TIPO_5);//aceita jogo
+								break;
+							}
+							
+						}
+					}
+					break;
+				}
 				for(int i=0;i<jogadores.size();i++)
 				{
 					if(user.equalsIgnoreCase(jogadores.get(i).getNome()))
@@ -44,6 +73,7 @@ public class AguardaResposta implements Runnable
 						inn=jogadores.get(i).getIn();
 						jogadores.get(i).setActivo(1);
 						jogConvidado=jogadores.get(i);
+						jogConvidado.setNomeAdver(jogPrincipal.getNome());
 						break;
 					}
 					
@@ -56,17 +86,25 @@ public class AguardaResposta implements Runnable
 					oout.reset();
 					
 					
-					System.out.println("Esperar confirmação...");
-					escolha=(String)inn.readObject();
+					System.out.println("enviou mensagem po cliente...");
 					
-					if(escolha.equals("1"))
-						jogConvidado.setActivo(0);
 				}
 				
 			}
+			System.out.println("Sai");
 		}
-		catch (ClassNotFoundException e) {System.out.println(e);}
-		catch (IOException e) {System.out.println(e);}
+		catch (ClassNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			System.out.println("1111 saiu a tread jog"+jogPrincipal.getNome());
+		}
 	}
 
 

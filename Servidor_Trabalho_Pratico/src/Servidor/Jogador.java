@@ -1,4 +1,5 @@
 package Servidor;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -9,9 +10,11 @@ public class Jogador
 	ObjectOutputStream out;
 	ObjectInputStream in;
 	String nome;
+	String nomeAdver;
 	int id;
 	int id_jogo;
 	int activo;//0->activo;1->em pedido de convite;2->em jogo
+	
 	
 	public Jogador(ObjectOutputStream out,ObjectInputStream in,String nome,int id,int activo)
 	{
@@ -20,8 +23,10 @@ public class Jogador
 		this.nome=nome;
 		this.id=id;
 		this.activo=activo;
+		this.nomeAdver="";
 	}
 
+	
 	public ObjectOutputStream getOut() {
 		return out;
 	}
@@ -68,6 +73,15 @@ public class Jogador
 
 	public void setActivo(int activo) {
 		this.activo = activo;
+	}
+
+
+	public String getNomeAdver() {
+		return nomeAdver;
+	}
+
+	public void setNomeAdver(String nomeAdver) {
+		this.nomeAdver = nomeAdver;
 	}
 	
 	
