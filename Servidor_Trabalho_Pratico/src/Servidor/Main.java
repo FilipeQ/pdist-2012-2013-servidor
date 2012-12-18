@@ -152,7 +152,7 @@ public class Main implements Runnable
 		ag=new AguardaResposta(in,out,jogadores,jog);
 		while(true)
 		{
-			System.out.println(jog.getActivo());
+			//System.out.println(jog.getActivo());
 			if(jog.getActivo()==0 & start==0)
 			{
 				t=new Thread(ag);
