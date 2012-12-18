@@ -21,6 +21,8 @@ public class Main implements Runnable
 	static final String MSG_TIPO_2="ActParesActivos";
 	static final String MSG_TIPO_3="Jogar";
 	static final String MSG_TIPO_4="Convidar";
+	static final String MSG_TIPO_5="JogoAceite";
+	static final String MSG_TIPO_6="JogoRegeitado";
 	
 	List<Jogador>jogadores;
     Socket s;
@@ -33,6 +35,7 @@ public class Main implements Runnable
 	
 	public Main(List<Jogador>jogadores,Socket s,Dados d) throws IOException
 	{
+		this.s=s;
 		this.jogadores=jogadores;
 		out=new ObjectOutputStream(s.getOutputStream());
 		in=new ObjectInputStream(s.getInputStream());
@@ -142,21 +145,29 @@ public class Main implements Runnable
 			if(user==jog.getNome())
 				break;
 		}
-		ag=new AguardaResposta(in,jogadores,jog);
+		ag=new AguardaResposta(in,jogadores,jog,s);
 		while(true)
 		{
+			
 			if(jog.getActivo()==0 & start==0)
 			{
 				t=new Thread(ag);
 				t.start();
 				start=1;//Impede que esteja sempre a entrar aqui
+				System.out.println("inicio a tread jog"+jog.getNome());
 			}
 			else
 			{
 				if(jog.getActivo()==1)
 				{
-					t.interrupt();
-					start=0;
+					if(start==1)
+					{
+						System.out.println("entrouaqui");
+						//t.interrupt();
+						start=0;
+						//in = jog.getIn();
+						System.out.println("Fechou a tread jog"+jog.getNome());
+					}
 					
 				}
 			}
