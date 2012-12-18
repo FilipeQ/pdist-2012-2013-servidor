@@ -128,6 +128,7 @@ public class Main implements Runnable
 	{
 		
 	}
+	
 	@Override
 	public void run() 
 	{
@@ -154,7 +155,7 @@ public class Main implements Runnable
 				t=new Thread(ag);
 				t.start();
 				start=1;//Impede que esteja sempre a entrar aqui
-				System.out.println("inicio a tread jog"+jog.getNome());
+				System.out.println("inicio a tread jog"+jog.getNome()+" ligou a tread");
 			}
 			else
 			{
