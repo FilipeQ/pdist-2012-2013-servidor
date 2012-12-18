@@ -16,6 +16,7 @@ public class Jogador
 	int activo;//0->activo;1->em pedido de convite;2->em jogo
 	
 	
+	
 	public Jogador(ObjectOutputStream out,ObjectInputStream in,String nome,int id,int activo)
 	{
 		this.out=out;
@@ -24,6 +25,7 @@ public class Jogador
 		this.id=id;
 		this.activo=activo;
 		this.nomeAdver="";
+		
 	}
 
 	
@@ -83,8 +85,6 @@ public class Jogador
 	public void setNomeAdver(String nomeAdver) {
 		this.nomeAdver = nomeAdver;
 	}
-	
-	
 	
 	
 }
