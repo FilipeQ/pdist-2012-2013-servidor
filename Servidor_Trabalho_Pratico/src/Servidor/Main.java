@@ -25,6 +25,7 @@ public class Main implements Runnable
 	static final String MSG_TIPO_6="JogoRegeitado";
 	static final String MSG_TIPO_7="JogoGanho";
 	static final String MSG_TIPO_8="JogoPerdido";
+	static final String MSG_TIPO_9="JogoEmpatado";
 	
 	List<Jogador>jogadores;
     Socket s;
