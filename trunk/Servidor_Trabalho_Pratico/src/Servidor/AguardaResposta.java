@@ -37,7 +37,7 @@ public class AguardaResposta implements Runnable
 			while (!Thread.interrupted())
 			{
 				
-				user=(String)in.readObject();
+				user=(String)in.readObject();//aguarda resposta no proprio socket
 				System.out.println("leu tread user:"+user);
 				System.out.println("Activo:"+jogPrincipal.getActivo());
 						
