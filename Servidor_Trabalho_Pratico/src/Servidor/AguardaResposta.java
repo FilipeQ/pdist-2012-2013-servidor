@@ -8,23 +8,28 @@ import java.util.List;
 
 public class AguardaResposta implements Runnable
 {
-	ObjectOutputStream oout;
+	ObjectOutputStream out,oout;
 	ObjectInputStream in,inn;
 	List<Jogador> jogadores;
 	String user;
 	String escolha;
 	Jogador jogConvidado,jogPrincipal;
 	Socket s;
+	int vez;
+	int resultadoJogo;
+	Jogo jogo;
 	
 	
-	AguardaResposta(ObjectInputStream in,List<Jogador>jogadores,Jogador jogPrincipal,Socket s)
+	AguardaResposta(ObjectInputStream in,ObjectOutputStream out,List<Jogador>jogadores,Jogador jogPrincipal)
 	{
 		this.oout=null;
 		this.inn=null;
-		this.s=s;
 		this.in=in;
+		this.out=out;
 		this.jogadores=jogadores;
 		this.jogPrincipal=jogPrincipal;
+		vez=0;
+		jogo=new Jogo();
 	}
 		
 	
@@ -34,7 +39,7 @@ public class AguardaResposta implements Runnable
 	{
 		try 
 		{
-			while (!Thread.interrupted())
+			while (true)
 			{
 				
 				user=(String)in.readObject();//aguarda resposta no proprio socket
@@ -55,6 +60,7 @@ public class AguardaResposta implements Runnable
 								{
 									oout.writeObject(Main.MSG_TIPO_6);//regeita jogo
 									jogPrincipal.setActivo(0);
+									System.out.println("Activo rejeita jogo:"+jogPrincipal.getActivo());
 								}
 								else
 								{
@@ -95,6 +101,32 @@ public class AguardaResposta implements Runnable
 				
 			}
 			System.out.println("Sai");
+			System.out.println("Vai começar o jogo");
+			
+			vez=0;
+			while(true)
+			{
+				if(vez%2==0)//1==X
+				{
+					jogo=(Jogo)in.readObject();
+					
+				}
+				else//2==O
+				{
+					jogo=(Jogo)in.readObject();
+				}
+				
+				resultadoJogo=jogo.verificaFimJogo();
+				
+				if(resultadoJogo==1)
+				{
+				
+				}
+					
+			}
+				
+			
+			
 		}
 		catch (ClassNotFoundException e) 
 		{

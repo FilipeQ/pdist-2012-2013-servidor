@@ -23,6 +23,8 @@ public class Main implements Runnable
 	static final String MSG_TIPO_4="Convidar";
 	static final String MSG_TIPO_5="JogoAceite";
 	static final String MSG_TIPO_6="JogoRegeitado";
+	static final String MSG_TIPO_7="JogoGanho";
+	static final String MSG_TIPO_8="JogoPerdido";
 	
 	List<Jogador>jogadores;
     Socket s;
@@ -146,10 +148,10 @@ public class Main implements Runnable
 			if(user==jog.getNome())
 				break;
 		}
-		ag=new AguardaResposta(in,jogadores,jog,s);
+		ag=new AguardaResposta(in,out,jogadores,jog);
 		while(true)
 		{
-			
+			System.out.println(jog.getActivo());
 			if(jog.getActivo()==0 & start==0)
 			{
 				t=new Thread(ag);

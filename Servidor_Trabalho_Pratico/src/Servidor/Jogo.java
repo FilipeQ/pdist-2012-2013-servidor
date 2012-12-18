@@ -1,6 +1,8 @@
 package Servidor;
 
-public class Jogo {
+import java.io.Serializable;
+
+public class Jogo implements Serializable{
 	private static final int COLUNAS = 3;//numero de colunas da matriz do galo
     private static final int LINHAS = 3;//numero de linhas da matriz
 	private int m[][];//matriz de jogo
