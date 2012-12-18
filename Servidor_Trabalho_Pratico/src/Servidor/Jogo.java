@@ -6,10 +6,12 @@ public class Jogo implements Serializable{
 	private static final int COLUNAS = 3;//numero de colunas da matriz do galo
     private static final int LINHAS = 3;//numero de linhas da matriz
 	private int m[][];//matriz de jogo
+	private int fimJogo;
 	
 	
 	public Jogo() {
 		colocaMatrizInicializada();
+		fimJogo = -1;
 	}
 
 
@@ -85,4 +87,40 @@ public class Jogo implements Serializable{
         
         return 3;// devolve 3 se empatarem e o jogo acabou
     }
+
+
+
+	/**
+	 * @return the m
+	 */
+	public int[][] getM() {
+		return m;
+	}
+
+
+
+	/**
+	 * @param m the m to set
+	 */
+	public void setM(int[][] m) {
+		this.m = m;
+	}
+
+
+
+	/**
+	 * @return the fimJogo
+	 */
+	public int getFimJogo() {
+		return fimJogo;
+	}
+
+
+
+	/**
+	 * @param fimJogo the fimJogo to set
+	 */
+	public void setFimJogo(int fimJogo) {
+		this.fimJogo = fimJogo;
+	}
 }

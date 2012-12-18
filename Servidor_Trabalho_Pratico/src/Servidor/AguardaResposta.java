@@ -116,9 +116,12 @@ public class AguardaResposta implements Runnable
 					jogo=(Jogo)in.readObject();
 				}
 				
-				resultadoJogo=jogo.verificaFimJogo();
-				
-				if(resultadoJogo==1)
+				jogo.setFimJogo(jogo.verificaFimJogo());
+				out.writeObject(jogo);
+				oout.writeObject(jogo);
+				if(jogo.getFimJogo()!=-1)//caso tenha acabado o jogo
+					break;
+				/*if(resultadoJogo==1)
 				{
 					out.writeObject(Main.MSG_TIPO_7);
 					oout.writeObject(Main.MSG_TIPO_8);
@@ -135,7 +138,7 @@ public class AguardaResposta implements Runnable
 					out.writeObject(Main.MSG_TIPO_9);
 					oout.writeObject(Main.MSG_TIPO_9);
 					break;
-				}
+				}*/
 					
 			}
 				
