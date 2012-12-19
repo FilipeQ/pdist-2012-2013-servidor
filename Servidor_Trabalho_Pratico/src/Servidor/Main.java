@@ -75,12 +75,15 @@ public class Main implements Runnable
 			d.setMensagem(MSG_TIPO_1);
 			for(int i=0;i<jogadores.size();i++)
 			{
-				oout=jogadores.get(i).getOut();
-				System.out.println("ToString: "+d.toString());
-				oout.writeObject(MSG_TIPO_1);
-				oout.writeObject(d);
-				oout.flush();
-				oout.reset();
+				if(jogadores.get(i).getActivo()==0)
+				{
+					oout=jogadores.get(i).getOut();
+					System.out.println("ToString: "+d.toString());
+					oout.writeObject(MSG_TIPO_1);
+					oout.writeObject(d);
+					oout.flush();
+					oout.reset();
+				}
 			}
 		}
 		catch(IOException e){System.out.println(e);}
@@ -149,7 +152,7 @@ public class Main implements Runnable
 			if(user==jog.getNome())
 				break;
 		}
-		ag=new AguardaResposta(in,out,jogadores,jog);
+		ag=new AguardaResposta(in,out,jogadores,jog,d);
 		while(true)
 		{
 			//System.out.println(jog.getActivo());
@@ -167,9 +170,7 @@ public class Main implements Runnable
 					if(start==1)
 					{
 						System.out.println("entrouaqui");
-						//t.interrupt();
 						start=0;
-						//in = jog.getIn();
 						System.out.println("Fechou a tread jog"+jog.getNome());
 					}
 					
