@@ -48,6 +48,10 @@ public class Dados implements Serializable
 
 	@Override
 	public String toString() {
-		return "Dados [usersActivos=" + usersActivos + "]";
+		return "Dados [usersActivos=" + usersActivos + ", paresActivos="
+				+ paresActivos + "]";
 	}
+
+
+
 }

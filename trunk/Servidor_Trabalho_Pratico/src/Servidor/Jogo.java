@@ -7,9 +7,17 @@ public class Jogo implements Serializable{
     private static final int LINHAS = 3;//numero de linhas da matriz
 	private int m[][];//matriz de jogo
 	private int fimJogo;
+	private Dados d;
 	
 	
 	public Jogo() {
+		m = new int[LINHAS][COLUNAS];
+		colocaMatrizInicializada();
+		fimJogo = -1;
+	}
+	
+	public Jogo(Dados d) {
+		this.d=d;
 		m = new int[LINHAS][COLUNAS];
 		colocaMatrizInicializada();
 		fimJogo = -1;
@@ -132,4 +140,16 @@ public class Jogo implements Serializable{
 	public void setFimJogo(int fimJogo) {
 		this.fimJogo = fimJogo;
 	}
+
+
+	public Dados getD() {
+		return d;
+	}
+
+
+	public void setD(Dados d) {
+		this.d = d;
+	}
+	
+	
 }
