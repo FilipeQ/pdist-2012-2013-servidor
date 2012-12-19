@@ -14,6 +14,7 @@ public class Jogador
 	int id;
 	int id_jogo;
 	int activo;//0->activo;1->em pedido de convite;2->em jogo
+	int vitorias;
 	
 	
 	
@@ -25,6 +26,7 @@ public class Jogador
 		this.id=id;
 		this.activo=activo;
 		this.nomeAdver="";
+		this.vitorias=0;
 		
 	}
 
@@ -84,6 +86,16 @@ public class Jogador
 
 	public void setNomeAdver(String nomeAdver) {
 		this.nomeAdver = nomeAdver;
+	}
+
+
+	public int getVitorias() {
+		return vitorias;
+	}
+
+
+	public void setVitorias(int vitorias) {
+		this.vitorias += vitorias;
 	}
 	
 	
