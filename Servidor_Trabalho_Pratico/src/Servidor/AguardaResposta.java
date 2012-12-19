@@ -131,23 +131,7 @@ public class AguardaResposta implements Runnable
 				
 				System.out.println("ToString: "+d.toString());
 				
-				try
-				{
-					//d.setMensagem(MSG_TIPO_1);
-					for(int i=0;i<jogadores.size();i++)
-					{
-						if(jogadores.get(i).getActivo()==0)
-						{
-							oout=jogadores.get(i).getOut();
-							System.out.println("ToString: "+d.toString());
-							oout.writeObject(Main.MSG_TIPO_1);
-							oout.writeObject(d);
-							oout.flush();
-							oout.reset();
-						}
-					}
-				}
-				catch(IOException e){System.out.println(e);}
+				actualizaUsersOnline();
 				
 				oout=jogConvidado.getOut();
 				
@@ -182,11 +166,14 @@ public class AguardaResposta implements Runnable
 						}
 					}
 					vez++;
-					//jogo.setFimJogo(jogo.verificaFimJogo());
-					//out.writeObject(jogo);
-					//oout.writeObject(jogo);
+					
 					if(jogo.getFimJogo()!=-1)//caso tenha acabado o jogo
 					{
+						if(jogo.getFimJogo()==1)
+							jogPrincipal.setVitorias(1);
+						else if(jogo.getFimJogo()==2)
+							jogConvidado.setVitorias(1);
+							
 						out.writeObject(jogo);
 						out.flush();
 						out.reset();
@@ -201,55 +188,13 @@ public class AguardaResposta implements Runnable
 						d.getUsersActivos().add(jogConvidado.getNome());
 						
 						
-						try
-						{
-							//d.setMensagem(MSG_TIPO_1);
-							for(int i=0;i<jogadores.size();i++)
-							{
-								if(jogadores.get(i).getActivo()==0)
-								{
-									oout=jogadores.get(i).getOut();
-									System.out.println("ToString: "+d.toString());
-									oout.writeObject(Main.MSG_TIPO_1);
-									oout.writeObject(d);
-									oout.flush();
-									oout.reset();
-								}
-							}
-						}
-						catch(IOException e){System.out.println(e);}
+						actualizaUsersOnline();
 						
-						
-						
-						/*out.writeObject(Main.MSG_TIPO_1);
-						out.writeObject(d);
-						out.flush();
-						
-						oout.writeObject(Main.MSG_TIPO_1);
-						oout.writeObject(d);
-						oout.flush();*/
 						
 						
 						break;
 					}
-					/*if(resultadoJogo==1)
-					{
-						out.writeObject(Main.MSG_TIPO_7);
-						oout.writeObject(Main.MSG_TIPO_8);
-						break;
-					}
-					else if(resultadoJogo==2)
-					{
-						out.writeObject(Main.MSG_TIPO_8);
-						oout.writeObject(Main.MSG_TIPO_7);
-						break;
-					}
-					else if(resultadoJogo==3)
-					{
-						out.writeObject(Main.MSG_TIPO_9);
-						oout.writeObject(Main.MSG_TIPO_9);
-						break;
-					}*/
+					
 						
 				}
 				
@@ -272,7 +217,24 @@ public class AguardaResposta implements Runnable
 	}
 
 	
-
+	public void actualizaUsersOnline(){
+		try
+		{
+			//d.setMensagem(MSG_TIPO_1);
+			for(int i=0;i<jogadores.size();i++)
+			{
+				if(jogadores.get(i).getActivo()==0)
+				{
+					oout=jogadores.get(i).getOut();
+					oout.writeObject(Main.MSG_TIPO_1);
+					oout.writeObject(d);
+					oout.flush();
+					oout.reset();
+				}
+			}
+		}
+		catch(IOException e){System.out.println(e);}
+	}
 	
 	public ObjectOutputStream getOout() {
 		return oout;
